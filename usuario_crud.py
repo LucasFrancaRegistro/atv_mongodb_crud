@@ -6,14 +6,37 @@ database = client.test
 global db
 db = client.mercadolivre
 
-def insert(nome, email, cpf):
+def createEndereso():
+    rua =  input('nome da rua ')
+    bairro = input('nome do bairro ')
+    numero = input('numero da residencia ')
+    complemento = input('complemento (opcional) ')
+    endereco = {
+        "rua": rua,
+        "bairro": bairro,
+        "numero": numero,
+        "complemento": complemento
+    }
+    return endereco
+def insert():
     global db
     col = db.usuario
-    doc = {"nome": nome, "email": email, "cpf": cpf}
+    nome = input('nome do usuario ')
+    email = input('email do usuario ')
+    cpf = input('cpf do usuario ')
+    enderecos = []
+    while True:
+        enderecos.append(createEndereso())
+        resposta = input('quer adicionar outro endereço? (y/n) ')
+        if resposta == 'n':
+            break
+    doc = {"nome": nome,
+        "email": email,
+        "cpf": cpf,
+        'endereço': enderecos
+        }
     x = col.insert_one(doc)
     print(x.inserted_id)
-
-#insert('alison', 'alison@gmail', '90252530809')
 
 def sort():
     global db
@@ -38,4 +61,5 @@ def delete():
     query = { "nome": input("nome do usuario a deletar ")}
     col.delete_one(query)
 
-delete()
+insert()
+#delete()
