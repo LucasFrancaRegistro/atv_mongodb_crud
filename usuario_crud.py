@@ -18,7 +18,7 @@ def createEndereso():
         "complemento": complemento
     }
     return endereco
-def insert():
+def insertUsuario():
     global db
     col = db.usuario
     nome = input('nome do usuario ')
@@ -38,14 +38,14 @@ def insert():
     x = col.insert_one(doc)
     print(x.inserted_id)
 
-def sort():
+def sortUsuario():
     global db
     col = db.usuario
     doc = col.find().sort('nome')
     for x in doc:
         print(x)
 
-def update():
+def updateUsuario():
     global db
     col = db.usuario
     query = { "nome": input("nome do usuario a editar")}
@@ -55,11 +55,11 @@ def update():
     col.update_one(query, toUpdate)
     
 
-def delete():
+def deleteUsuario():
     global db
     col = db.usuario
     query = { "nome": input("nome do usuario a deletar ")}
     col.delete_one(query)
 
-insert()
+# insert()
 #delete()
