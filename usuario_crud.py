@@ -41,9 +41,8 @@ def insertUsuario():
 def sortUsuario():
     global db
     col = db.usuario
-    doc = col.find().sort('nome')
-    for x in doc:
-        print(x)
+    docs = col.find().sort('nome')
+    return docs
 
 def updateUsuario():
     global db
@@ -60,6 +59,11 @@ def deleteUsuario():
     col = db.usuario
     query = { "nome": input("nome do usuario a deletar ")}
     col.delete_one(query)
+
+def adicionarFavorito():
+    global db
+    col = db.usuario
+    pass
 
 # insert()
 #delete()
