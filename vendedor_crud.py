@@ -30,9 +30,8 @@ def insertVendedor():
 def sortVendedor():
     global db
     col = db.vendedor
-    doc = col.find().sort('nome')
-    for x in doc:
-        print(x)
+    docs = col.find().sort('nome')
+    return docs
 
 def updateVendedor():
     global db
