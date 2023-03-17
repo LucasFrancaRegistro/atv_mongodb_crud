@@ -23,6 +23,11 @@ def insertProduto():
 def sortProduto():
     global db
     col = db.produtos
-    doc = col.find().sort('nome')
-    for x in doc:
-        print(x)
+    docs = col.find().sort('nome')
+    return docs
+
+def deleteProduto():
+    global db
+    col = db.produtos
+    query = { "nome": input("Nome do produto a deletar: ")}
+    col.delete_one(query)
