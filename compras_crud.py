@@ -1,5 +1,4 @@
 import pymongo
-from datetime import date
 from produto_crud import sortProduto
 from usuario_crud import sortUsuario
 from vendedor_crud import sortVendedor
@@ -10,19 +9,62 @@ database = client.test
 global db
 db = client.mercadolivre
 
-def search(function):
-    docs = function
+
+def search(docs):
     objetos = []
-    for obj in objetos:
+    for obj in docs:
+        objetos.append(obj)
+    for obj_index in range(len(objetos)):
+        print(str(obj_index) + ':  ' + str(objetos[obj_index]))
+    return objetos
+
+def searchNomes(docs):
+    objetos = []
+    for obj in docs:
         objetos.append(obj)
     for obj_index in range(len(objetos)):
         print(str(obj_index) + ':  ' + objetos[obj_index]['nome'])
+    return objetos
 
 def insertCompra():
     global db
     col = db.compras
-    data = date.today()
-    search(sortUsuario())
+    data = input("Insira a data da compra: ")
+    usuarios = searchNomes(sortUsuario())
+    escolha = input("Usuario da compra: ")
+    usuario = usuarios[int(escolha)]
+    produtos = searchNomes(sortProduto())
+    escolha = input("Produto comprado: ")
+    produto = produtos[int(escolha)]
+    del produto["vendedor"]
+    vendedores = searchNomes(sortVendedor())
+    escolha = input("Vendedor do produto: ")
+    vendedor = vendedores[int(escolha)]
+    doc = {"data": data,
+        "usuario": usuario,
+        "produto": produto,
+        "vendedor": vendedor}
+    col.insert_one(doc)
 
-#insertCompra()
-search(sortProduto())
+def sortCompras():
+    global db
+    col = db.compras
+    docs = col.find()
+    return docs
+
+def updateCompra():
+    global db
+    col = db.compras
+
+def deleteCompra():
+    global db
+    col = db.compras
+    compras = search(sortCompras())
+    escolha = int(input("Compra a deletar: "))
+    compra = compras[escolha]["_id"]
+    query = { "_id": compra }
+    col.delete_one(query)
+
+insertCompra()
+# search(sortUsuario())
+#deleteCompra()
