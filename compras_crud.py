@@ -1,7 +1,4 @@
 import pymongo
-from produto_crud import sortProduto
-from usuario_crud import sortUsuario
-from vendedor_crud import sortVendedor
 client = pymongo.MongoClient("mongodb+srv://programa:o5ma5JcTMMNPbydk@cluster0.ephuxat.mongodb.net/?retryWrites=true&w=majority")
 database = client.test
 #print(db)
@@ -9,17 +6,13 @@ database = client.test
 global db
 db = client.mercadolivre
 
-
 def search(docs):
     objetos = []
     for obj in docs:
         objetos.append(obj)
     for obj_index in range(len(objetos)):
         print(str(obj_index) + ':  ' + str(objetos[obj_index]))
-    escolha = int(input("Compra a deletar: "))
-    objeto = objetos[escolha]["_id"]
-    query = { "_id": objeto }
-    return query
+    return objetos
 
 def searchNomes(docs):
     objetos = []
@@ -30,6 +23,9 @@ def searchNomes(docs):
     return objetos
 
 def insertCompra():
+    from produto_crud import sortProduto
+    from usuario_crud import sortUsuario
+    from vendedor_crud import sortVendedor
     global db
     col = db.compras
     data = input("Insira a data da compra: ")
@@ -58,7 +54,10 @@ def sortCompras():
 def updateCompra():
     global db
     col = db.compras
-    query = search(sortCompras())
+    compras = search(sortCompras())
+    escolha = int(input("Compra a deletar: "))
+    compra = compras[escolha]["_id"]
+    query = { "_id": compra }
     print('''O que você deseja editar?
     1:  data.
     2:  usuario.
@@ -70,7 +69,10 @@ def updateCompra():
 def deleteCompra():
     global db
     col = db.compras
-    query = search(sortCompras())
+    compras = search(sortCompras())
+    escolha = int(input("Compra a deletar: "))
+    compra = compras[escolha]["_id"]
+    query = { "_id": compra }
     col.delete_one(query)
 
 #insertCompra()
