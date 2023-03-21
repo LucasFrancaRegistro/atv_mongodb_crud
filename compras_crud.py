@@ -16,7 +16,10 @@ def search(docs):
         objetos.append(obj)
     for obj_index in range(len(objetos)):
         print(str(obj_index) + ':  ' + str(objetos[obj_index]))
-    return objetos
+    escolha = int(input("Compra a deletar: "))
+    objeto = objetos[escolha]["_id"]
+    query = { "_id": objeto }
+    return query
 
 def searchNomes(docs):
     objetos = []
@@ -55,16 +58,21 @@ def sortCompras():
 def updateCompra():
     global db
     col = db.compras
+    query = search(sortCompras())
+    print('''O que você deseja editar?
+    1:  data.
+    2:  usuario.
+    3:  produto.
+    4:  vendedor.''')
+    pass
+
 
 def deleteCompra():
     global db
     col = db.compras
-    compras = search(sortCompras())
-    escolha = int(input("Compra a deletar: "))
-    compra = compras[escolha]["_id"]
-    query = { "_id": compra }
+    query = search(sortCompras())
     col.delete_one(query)
 
-insertCompra()
-# search(sortUsuario())
+#insertCompra()
+#search(sortUsuario())
 #deleteCompra()
