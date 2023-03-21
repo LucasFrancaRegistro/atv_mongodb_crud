@@ -20,6 +20,15 @@ def insertProduto():
         "foto": foto}
     col.insert_one(doc)
 
+def updateProduto():
+    global db
+    col = db.produtos
+    query = { "nome": input("nome do produto a editar")}
+    campo = input("campo para editar ")
+    valor = input("valor novo ")
+    toUpdate = { "$set": { campo: valor} }
+    col.update_one(query, toUpdate)
+
 def sortProduto():
     global db
     col = db.produtos
