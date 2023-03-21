@@ -47,3 +47,6 @@ def deleteVendedor():
     col = db.vendedor
     query = { "nome": input("nome do vendedor a deletar ")}
     col.delete_one(query)
+
+#deleteVendedor()
+#insertVendedor()
