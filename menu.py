@@ -1,27 +1,148 @@
 import pymongo
-import compras_crud
-import usuario_crud
-import produto_crud
-import vendedor_crud
 client = pymongo.MongoClient("mongodb+srv://programa:o5ma5JcTMMNPbydk@cluster0.ephuxat.mongodb.net/?retryWrites=true&w=majority")
 database = client.test
 
-print('''Bem vindo ao central de banco de dados do Mercado Livre
-use os numeros para escolher suas opções
+def main():
+    while True:
+        print('''Bem vindo ao central de banco de dados do Mercado Livre
+        use os numeros para escolher suas opções
 
-no que deseja interagir?
+        no que deseja interagir?
 
-1:  Usuarios
-2:  Vendedores
-3:  Produtos
-4:  Compras''')
+        1:  Usuarios
+        2:  Vendedores
+        3:  Produtos
+        4:  Compras
+        0:  Sair''')
 
+        escolha = input("Escolha uma opção: ")
+        if escolha == '1':
+            usuarioCRUD()
+        elif escolha == '2':
+            vendedorCRUD()
+        elif escolha == '3':
+            produtoCRUD()
+        elif escolha == '4':
+            comprasCRUD()
+        else:
+            break
+
+        
 def usuarioCRUD():
-    print('''O que deseja fazer?
-    
-    1:  Inserir usuario
-    2:  Listar usuarios
-    3:  Atualizar usuario
-    4:  Deletar usuario''')
+    while True:
+        print('''O que deseja fazer?
+        
+        1:  Inserir usuario
+        2:  Listar usuarios
+        3:  Atualizar usuario
+        4:  Deletar usuario
+        0:  sair''')
 
-    switch( )
+        escolha = input("Escolha uma opção: ")
+        if escolha == '1':
+            from usuario_crud import insertUsuario
+            insertUsuario()
+        elif escolha == '2':
+            from usuario_crud import sortUsuario
+            usuarios = sortUsuario()
+            for usuario in usuarios:
+                print(str(usuario) + '''
+                ''')
+        elif escolha == '3':
+            from usuario_crud import updateUsuario
+            updateUsuario()
+        elif escolha == '4':
+            from usuario_crud import deleteUsuario
+            deleteUsuario()
+        else:
+            break
+
+def vendedorCRUD():
+    while True:
+        print('''O que deseja fazer?
+        
+        1:  Inserir vendedor
+        2:  Listar vendedores
+        3:  Atualizar vendedor
+        4:  Deletar vendedor
+        0:  sair''')
+
+        escolha = input("Escolha uma opção: ")
+        if escolha == '1':
+            from vendedor_crud import insertVendedor
+            insertVendedor()
+        elif escolha == '2':
+            from vendedor_crud import sortVendedor
+            vendedores = sortVendedor()
+            for vendedor in vendedores:
+                print(str(vendedor) + '''
+                ''')
+        elif escolha == '3':
+            from vendedor_crud import updateVendedor
+            updateVendedor()
+        elif escolha == '4':
+            from vendedor_crud import deleteVendedor
+            deleteVendedor()
+        else:
+            break
+
+def produtoCRUD():
+    while True:
+        print('''O que deseja fazer?
+        
+        1:  Inserir produto
+        2:  Listar produtos
+        3:  Atualizar produto
+        4:  Deletar produto
+        0:  sair''')
+
+        escolha = input("Escolha uma opção: ")
+        if escolha == '1':
+            from produto_crud import insertProduto
+            insertProduto()
+        elif escolha == '2':
+            from produto_crud import sortProduto
+            produtos = sortProduto()
+            for produto in produtos:
+                print(str(produto) + '''
+                ''')
+        elif escolha == '3':
+            from produto_crud import updateProduto
+            updateProduto()
+        elif escolha == '4':
+            from produto_crud import deleteProduto
+            deleteProduto()
+        else:
+            break
+
+def comprasCRUD():
+    while True:
+        print('''O que deseja fazer?
+        
+        1:  Inserir compra
+        2:  Listar compras
+        3:  Atualizar compra
+        4:  Deletar compra
+        0:  sair''')
+
+        escolha = input("Escolha uma opção: ")
+        if escolha == '1':
+            from compras_crud import insertCompra
+            insertCompra()
+        elif escolha == '2':
+            from compras_crud import sortCompras
+            compras = sortCompras()
+            for compra in compras:
+                print(str(compra) + '''
+                ''')
+        elif escolha == '3':
+            from compras_crud import updateCompra
+            updateCompra()
+        elif escolha == '4':
+            from compras_crud import deleteCompra
+            deleteCompra()
+        else:
+            break
+
+
+main()
