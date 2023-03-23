@@ -1,5 +1,4 @@
 import pymongo
-from usuario_crud import createEndereso
 client = pymongo.MongoClient("mongodb+srv://programa:o5ma5JcTMMNPbydk@cluster0.ephuxat.mongodb.net/?retryWrites=true&w=majority")
 database = client.test
 #print(db)
@@ -8,6 +7,7 @@ global db
 db = client.mercadolivre
 
 def insertVendedor():
+    from usuario_crud import createEndereso
     global db
     col = db.vendedor
     nome = input('nome do vendedor: ')
@@ -34,19 +34,62 @@ def sortVendedor():
     return docs
 
 def updateVendedor():
+    from usuario_crud import updateEndereco
+    from compras_crud import search
     global db
     col = db.vendedor
-    query = { "nome": input("nome do vendedor a editar")}
-    campo = input("campo para editar ")
-    valor = input("valor novo ")
-    toUpdate = { "$set": { campo: valor} }
+    vendedores = search(sortVendedor())
+    vendedor = vendedores[int(input("Escolha o vendedor que deseja editar: "))]
+    print('''O que deseja editar? 
+    Nome
+    Email
+    Cpf
+    Endereço
+    Produtos''')
+    escolha = input("Escreva a sua opção: ").lower()
+    if escolha == "endereço":
+        updateEndereco(vendedor)
+    elif escolha == "produtos":
+        updateVendedorProdutos(vendedor)
+    else:
+        valor = input("valor novo ")
+        toUpdate = { "$set": { escolha: valor} }
+        query = { "_id": vendedor["_id"]}
+        col.update_one(query, toUpdate)
+
+def updateVendedorProdutos(vendedor):
+    from compras_crud import search
+    from produto_crud import sortProduto
+    global db
+    col = db.vendedor
+    vendaProdutos = vendedor["produtos"]
+    print('''O que deseja fazer?
+    1:  Adicinar aos produtos vendidos
+    2:  Remover dos produtos vendidos''')
+    escolha = input('Escolha uma opção: ')
+    if escolha == '1':
+        produtos = search(sortProduto())
+        produto = produtos[int(input("escolha o produto que quer adicionar: "))]
+        del produto["vendedor"]
+        vendaProdutos.append(produto)
+    elif escolha == '2':
+        for index in range(len(vendaProdutos)):
+            print(str(index) + ':' + str(vendaProdutos[index]))
+        vendaProdutos.pop(int(input("Escolha o produto para remover: ")))
+    query = { "_id": vendedor["_id"]}
+    toUpdate = {"$set":{ "produtos": vendaProdutos}}
     col.update_one(query, toUpdate)
 
 def deleteVendedor():
+    from compras_crud import search
     global db
     col = db.vendedor
-    query = { "nome": input("nome do vendedor a deletar ")}
+    vendedores = search(sortVendedor())
+    escolha = int(input("Vendedor a deletar: "))
+    vendedor = vendedores[escolha]["_id"]
+    query = { "_id": vendedor }
     col.delete_one(query)
 
 #deleteVendedor()
 #insertVendedor()
+updateVendedor()
