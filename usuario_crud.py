@@ -1,6 +1,12 @@
 import pymongo
 client = pymongo.MongoClient("mongodb+srv://programa:o5ma5JcTMMNPbydk@cluster0.ephuxat.mongodb.net/?retryWrites=true&w=majority")
 database = client.test
+import redis
+conR = redis.Redis(host='redis-12594.c62.us-east-1-4.ec2.cloud.redislabs.com',
+                  port=12594,
+                  password='123senha')
+
+
 #print(db)
 
 global db
@@ -102,9 +108,11 @@ def deleteUsuario():
     col = db.usuario
     usuarios = search(sortUsuario())
     escolha = int(input("usuario a deletar: "))
-    usuario = usuarios[escolha]["_id"]
-    query = { "_id": usuario }
+    usuario = usuarios[escolha]
+    conR.set(usuario["nome"]+ ":" + usuario["cpf"], str(usuario))
+    query = { "_id": usuario["_id"] }
     col.delete_one(query)
+    print(conR.get(usuario["nome"]+ ":" + usuario["cpf"]))
 
 def updateFavorito(usuario):
     from compras_crud import search
@@ -131,6 +139,6 @@ def updateFavorito(usuario):
 
 
 
-# insert()
-#delete()
-updateUsuario()
+#insertUsuario()
+deleteUsuario()
+#updateUsuario()
