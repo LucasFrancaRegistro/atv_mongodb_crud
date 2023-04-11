@@ -58,4 +58,4 @@ def deleteProduto():
 
 # deleteProduto()
 # insertProduto()
-updateProduto()
+#updateProduto()

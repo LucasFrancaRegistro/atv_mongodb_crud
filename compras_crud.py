@@ -96,4 +96,4 @@ def deleteCompra():
 #insertCompra()
 #search(sortUsuario())
 #deleteCompra()
-updateCompra()
+#updateCompra()
