@@ -92,4 +92,4 @@ def deleteVendedor():
 
 #deleteVendedor()
 #insertVendedor()
-updateVendedor()
+#updateVendedor()
