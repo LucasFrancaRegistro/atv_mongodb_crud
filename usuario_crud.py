@@ -1,9 +1,10 @@
 import pymongo
+import pickle
 client = pymongo.MongoClient("mongodb+srv://programa:o5ma5JcTMMNPbydk@cluster0.ephuxat.mongodb.net/?retryWrites=true&w=majority")
 database = client.test
 import redis
-conR = redis.Redis(host='redis-12594.c62.us-east-1-4.ec2.cloud.redislabs.com',
-                  port=12594,
+conR = redis.Redis(host='redis-10721.c261.us-east-1-4.ec2.cloud.redislabs.com',
+                  port=10721,
                   password='123senha')
 
 
@@ -109,10 +110,21 @@ def deleteUsuario():
     usuarios = search(sortUsuario())
     escolha = int(input("usuario a deletar: "))
     usuario = usuarios[escolha]
-    conR.set(usuario["nome"]+ ":" + usuario["cpf"], str(usuario))
+    conR.set(usuario["email"], pickle.dumps(usuario))
     query = { "_id": usuario["_id"] }
     col.delete_one(query)
-    print(conR.get(usuario["nome"]+ ":" + usuario["cpf"]))
+    print(conR.get(usuario["email"]))
+
+def restaurarUsuario():
+    global db
+    col = db.usuario
+    usuario_res = input("Email do usuario a restaurar: ")
+    if conR.exists(usuario_res) > 0:
+        usuario = conR.get(usuario_res)
+        col.insert_one(pickle.loads(usuario))
+    else:
+        print("Usuario não existe")
+
 
 def updateFavorito(usuario):
     from compras_crud import search
@@ -125,7 +137,6 @@ def updateFavorito(usuario):
     2:  Remover dos favoritos''')
     escolha = input('Escolha uma opção: ')
     if escolha == '1':
-        print('aaaaa')
         produtos = search(sortProduto())
         favoritos.append(produtos[int(input("escolha o produto que quer adicionar: "))])
     elif escolha == '2':
@@ -138,7 +149,7 @@ def updateFavorito(usuario):
 
 
 
-
 #insertUsuario()
-deleteUsuario()
+#deleteUsuario()
+#restaurarUsuario()
 #updateUsuario()
