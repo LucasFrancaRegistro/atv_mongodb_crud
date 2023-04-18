@@ -1,7 +1,12 @@
 import pymongo
+import pickle
 client = pymongo.MongoClient("mongodb+srv://programa:o5ma5JcTMMNPbydk@cluster0.ephuxat.mongodb.net/?retryWrites=true&w=majority")
 database = client.test
-#print(db)
+import redis
+conR = redis.Redis(host='redis-10721.c261.us-east-1-4.ec2.cloud.redislabs.com',
+                  port=10721,
+                  password='123senha')
+
 
 global db
 db = client.mercadolivre
@@ -93,6 +98,26 @@ def deleteCompra():
     query = { "_id": compra }
     col.delete_one(query)
 
+def syncRedis():
+    global db
+    col = db.compras
+    comprasMongo = sortCompras()
+    if conR.exists("compras") > 0:
+        comprasRedis = conR.lrange("teste", 0, -1)
+        for compra in range(len(comprasMongo)):
+            if pickle.dumps(comprasMongo[compra]) == 
+    else:
+        for compra in compras:
+            conR.lpush("compras", pickle.dumps(compra))
+    
+
+#def syncMongo():
+
+for i in conR.lrange("teste", 0, -1):
+    print(i)
+# conR.lpush("teste", "oi1")
+# conR.lpush("teste", "oi2")
+# print(conR.lrange("teste", 0, -1))
 #insertCompra()
 #search(sortUsuario())
 #deleteCompra()
