@@ -36,6 +36,7 @@ def usuarioCRUD():
         2:  Listar usuarios
         3:  Atualizar usuario
         4:  Deletar usuario
+        5:  Restaurar usuario
         0:  sair''')
 
         escolha = input("Escolha uma opção: ")
@@ -54,6 +55,9 @@ def usuarioCRUD():
         elif escolha == '4':
             from usuario_crud import deleteUsuario
             deleteUsuario()
+        elif escolha == "5":
+            from usuario_crud import restaurarUsuario
+            restaurarUsuario()
         else:
             break
 
