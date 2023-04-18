@@ -111,6 +111,7 @@ def deleteUsuario():
     escolha = int(input("usuario a deletar: "))
     usuario = usuarios[escolha]
     conR.set(usuario["email"], pickle.dumps(usuario))
+    conR.expire(usuario["email"], 7200)
     query = { "_id": usuario["_id"] }
     col.delete_one(query)
     print(conR.get(usuario["email"]))
@@ -146,7 +147,6 @@ def updateFavorito(usuario):
     query = { "_id": usuario["_id"]}
     toUpdate = {"$set":{ "favoritos": favoritos}}
     col.update_one(query, toUpdate)
-
 
 
 #insertUsuario()
