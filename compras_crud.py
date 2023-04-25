@@ -105,7 +105,10 @@ def syncRedis():
     if conR.exists("compras") > 0:
         comprasRedis = conR.lrange("teste", 0, -1)
         for compra in range(len(comprasMongo)):
-            if pickle.dumps(comprasMongo[compra]) == 
+            if conR.exists(comprasMongo[compra]["email"]) < 1:
+                conR.set(comprasMongo[compra]["email"], pickle.dumps(comprasMongo[compra]))
+                
+
     else:
         for compra in compras:
             conR.lpush("compras", pickle.dumps(compra))
