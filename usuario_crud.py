@@ -148,6 +148,29 @@ def updateFavorito(usuario):
     toUpdate = {"$set":{ "favoritos": favoritos}}
     col.update_one(query, toUpdate)
 
+def syincRedisFav():
+    from compras_crud import search
+    usuarios = search(sortUsuario())
+    usuario = usuarios[int(input("Escolha o usuario: "))]
+    favoritos = usuario["favoritos"]
+    if conR.exists(usuario["email"]+"-favoritos") < 1:
+        conR.DEL(usuario["email"]+"-favoritos")
+    for favorito in favoritos:
+        conR.lpush(usuario["email"]+"-favoritos", pickle.dumps(favorito))
+
+def syincMongoFav():
+    from compras_crud import search
+    global db
+    col = db.usuario
+    usuarios = search(sortUsuario())
+    usuario = usuarios[int(input("Escolha o usuario: "))]
+    favoritosMongo = []
+    favoritosRedis = conR.get(usuario["email"]+"-favortios")
+    for favaorito in favoritosRedis:
+        favoritosMongo.append(pickle.loads(favaorito))
+    query = { "_id": usuario["_id"]}
+    toUpdate = {"$set":{ "favoritos": favoritosMongo}}
+    col.update_one(query, toUpdate)
 
 #insertUsuario()
 #deleteUsuario()
