@@ -116,8 +116,8 @@ def syncRedis():
 
 #def syncMongo():
 
-for i in conR.lrange("teste", 0, -1):
-    print(i)
+# for i in conR.lrange("teste", 0, -1):
+#     print(i)
 # conR.lpush("teste", "oi1")
 # conR.lpush("teste", "oi2")
 # print(conR.lrange("teste", 0, -1))
