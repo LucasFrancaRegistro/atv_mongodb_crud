@@ -37,6 +37,8 @@ def usuarioCRUD():
         3:  Atualizar usuario
         4:  Deletar usuario
         5:  Restaurar usuario
+        6:  Sincronizar favoritos no Redis
+        7:  Sincronizar favoritos no Mongo
         0:  sair''')
 
         escolha = input("Escolha uma opção: ")
@@ -58,6 +60,12 @@ def usuarioCRUD():
         elif escolha == "5":
             from usuario_crud import restaurarUsuario
             restaurarUsuario()
+        elif escolha == "6":
+            from usuario_crud import syincRedisFav
+            syincRedisFav()
+        elif escolha == "7":
+            from usuario_crud import syincMongoFav
+            syincMongoFav()
         else:
             break
 
