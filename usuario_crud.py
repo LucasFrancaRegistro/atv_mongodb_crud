@@ -60,6 +60,7 @@ def insertUsuario():
     email = input('Email do usuario: ')
     cpf = input('Cpf do usuario: ')
     enderecos = []
+    favoritos = []
     while True:
         enderecos.append(createEndereco())
         resposta = input('Quer adicionar outro endereço? (y/n) ')
@@ -68,7 +69,8 @@ def insertUsuario():
     doc = {"nome": nome,
         "email": email,
         "cpf": cpf,
-        'endereço': enderecos
+        'endereço': enderecos,
+        'favoritos': favoritos
         }
     x = col.insert_one(doc)
     print(x.inserted_id)
@@ -92,9 +94,9 @@ def updateUsuario():
     Endereço
     Favoritos''')
     escolha = input("Escreva a sua opção: ").lower()
-    if escolha == "endereço":
+    if escolha.lower() == "endereço":
         updateEndereco(usuario)
-    elif escolha == "favoritos":
+    elif escolha.lower() == "favoritos":
         updateFavorito(usuario)
     else:
         valor = input("valor novo ")
@@ -154,7 +156,7 @@ def syincRedisFav():
     usuario = usuarios[int(input("Escolha o usuario: "))]
     favoritos = usuario["favoritos"]
     if conR.exists(usuario["email"]+"-favoritos") < 1:
-        conR.DEL(usuario["email"]+"-favoritos")
+        conR.delete(usuario["email"]+"-favoritos")
     for favorito in favoritos:
         conR.lpush(usuario["email"]+"-favoritos", pickle.dumps(favorito))
 
@@ -166,6 +168,7 @@ def syincMongoFav():
     usuario = usuarios[int(input("Escolha o usuario: "))]
     favoritosMongo = []
     favoritosRedis = conR.get(usuario["email"]+"-favortios")
+    print(favoritosRedis)
     for favaorito in favoritosRedis:
         favoritosMongo.append(pickle.loads(favaorito))
     query = { "_id": usuario["_id"]}
@@ -176,3 +179,5 @@ def syincMongoFav():
 #deleteUsuario()
 #restaurarUsuario()
 #updateUsuario()
+# syincRedisFav()
+# syincMongoFav()
