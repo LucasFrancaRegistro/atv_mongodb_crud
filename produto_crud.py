@@ -1,5 +1,5 @@
 import pymongo
-from usuario_crud import createEndereso
+from usuario_crud import createEndereco
 from compras_crud import search
 from vendedor_crud import sortVendedor
 client = pymongo.MongoClient("mongodb+srv://programa:o5ma5JcTMMNPbydk@cluster0.ephuxat.mongodb.net/?retryWrites=true&w=majority")
