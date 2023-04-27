@@ -39,6 +39,8 @@ def usuarioCRUD():
         5:  Restaurar usuario
         6:  Sincronizar favoritos no Redis
         7:  Sincronizar favoritos no Mongo
+        8:  Sincronizar endereços no Redis
+        9:  Sincronizar endereços no Mongo
         0:  sair''')
 
         escolha = input("Escolha uma opção: ")
@@ -66,6 +68,12 @@ def usuarioCRUD():
         elif escolha == "7":
             from usuario_crud import syincMongoFav
             syincMongoFav()
+        elif escolha == "8":
+            from usuario_crud import syncRedisUsuaEnd
+            syncRedisUsuaEnd()
+        elif escolha == "8":
+            from usuario_crud import syncMongoUsuaEnd
+            syncMongoUsuaEnd()
         else:
             break
 
@@ -77,6 +85,8 @@ def vendedorCRUD():
         2:  Listar vendedores
         3:  Atualizar vendedor
         4:  Deletar vendedor
+        5:  Sincronizar endereços no Redis
+        6:  Sincronizar endereços no Mongo
         0:  sair''')
 
         escolha = input("Escolha uma opção: ")
@@ -95,6 +105,12 @@ def vendedorCRUD():
         elif escolha == '4':
             from vendedor_crud import deleteVendedor
             deleteVendedor()
+        elif escolha == '5':
+            from vendedor_crud import syncRedisVendEnd
+            syncRedisVendEnd()
+        elif escolha == '6':
+            from vendedor_crud import syncMongoVendEnd
+            syncMongoVendEnd()
         else:
             break
 
