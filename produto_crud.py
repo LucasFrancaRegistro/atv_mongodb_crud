@@ -1,7 +1,4 @@
 import pymongo
-from usuario_crud import createEndereco
-from compras_crud import search
-from vendedor_crud import sortVendedor
 client = pymongo.MongoClient("mongodb+srv://programa:o5ma5JcTMMNPbydk@cluster0.ephuxat.mongodb.net/?retryWrites=true&w=majority")
 database = client.test
 #print(db)
@@ -10,6 +7,8 @@ global db
 db = client.mercadolivre
 
 def insertProduto():
+    from compras_crud import search
+    from vendedor_crud import sortVendedor
     global db
     col = db.produtos
     nome = input('nome do produto: ')
@@ -28,6 +27,8 @@ def insertProduto():
     col.insert_one(doc)
 
 def updateProduto():
+    from compras_crud import search
+    from vendedor_crud import sortVendedor
     global db
     col = db.produtos
     produtos = search(sortProduto())
