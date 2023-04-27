@@ -167,7 +167,7 @@ def syincMongoFav():
     usuarios = search(sortUsuario())
     usuario = usuarios[int(input("Escolha o usuario: "))]
     favoritosMongo = []
-    favoritosRedis = conR.lrange("pamonha123@gmail.com-favoritos", 0, -1)
+    favoritosRedis = conR.lrange(usuario["email"]+"-favoritos", 0, -1)
     for favaorito in favoritosRedis:
         favoritosMongo.append(pickle.loads(favaorito))
     query = { "_id": usuario["_id"]}
