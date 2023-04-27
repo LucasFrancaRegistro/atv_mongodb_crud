@@ -155,7 +155,7 @@ def syincRedisFav():
     usuarios = search(sortUsuario())
     usuario = usuarios[int(input("Escolha o usuario: "))]
     favoritos = usuario["favoritos"]
-    if conR.exists(usuario["email"]+"-favoritos") < 1:
+    if conR.exists(usuario["email"]+"-favoritos") > 0:
         conR.delete(usuario["email"]+"-favoritos")
     for favorito in favoritos:
         conR.lpush(usuario["email"]+"-favoritos", pickle.dumps(favorito))
@@ -167,17 +167,20 @@ def syincMongoFav():
     usuarios = search(sortUsuario())
     usuario = usuarios[int(input("Escolha o usuario: "))]
     favoritosMongo = []
-    favoritosRedis = conR.get(usuario["email"]+"-favortios")
-    print(favoritosRedis)
+    favoritosRedis = conR.lrange("pamonha123@gmail.com-favoritos", 0, -1)
     for favaorito in favoritosRedis:
         favoritosMongo.append(pickle.loads(favaorito))
     query = { "_id": usuario["_id"]}
     toUpdate = {"$set":{ "favoritos": favoritosMongo}}
     col.update_one(query, toUpdate)
 
+
 #insertUsuario()
 #deleteUsuario()
 #restaurarUsuario()
 #updateUsuario()
 # syincRedisFav()
-# syincMongoFav()
+# for i in conR.lrange("pamonha123@gmail.com-favoritos", 0, -1):
+#     print(pickle.loads(i))
+#print(conR.exists("pamonha123@gmail.com-favoritos"))
+#syincMongoFav()

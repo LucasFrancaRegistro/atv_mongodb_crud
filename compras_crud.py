@@ -118,8 +118,8 @@ def syncRedis():
 
 # for i in conR.lrange("teste", 0, -1):
 #     print(i)
-# conR.lpush("teste", "oi1")
-# conR.lpush("teste", "oi2")
+# conR.lpush("teste", "teste")
+# conR.lpush("teste", "teste2")
 # print(conR.lrange("teste", 0, -1))
 #insertCompra()
 #search(sortUsuario())
