@@ -1,13 +1,17 @@
 import pymongo
 client = pymongo.MongoClient("mongodb+srv://programa:o5ma5JcTMMNPbydk@cluster0.ephuxat.mongodb.net/?retryWrites=true&w=majority")
 database = client.test
-#print(db)
+import redis
+conR = redis.Redis(host='redis-10721.c261.us-east-1-4.ec2.cloud.redislabs.com',
+                  port=10721,
+                  password='123senha')
+import pickle
 
 global db
 db = client.mercadolivre
 
 def insertVendedor():
-    from usuario_crud import createEndereso
+    from vendedor_crud import createEndereso
     global db
     col = db.vendedor
     nome = input('nome do vendedor: ')
@@ -34,7 +38,7 @@ def sortVendedor():
     return docs
 
 def updateVendedor():
-    from usuario_crud import updateEndereco
+    from vendedor_crud import updateEndereco
     from compras_crud import search
     global db
     col = db.vendedor
@@ -89,6 +93,30 @@ def deleteVendedor():
     vendedor = vendedores[escolha]["_id"]
     query = { "_id": vendedor }
     col.delete_one(query)
+
+def syncRedisVendEnd():
+    from compras_crud import search
+    vendedores = search(sortVendedor())
+    vendedor = vendedores[int(input("Escolha o vendedor: "))]
+    enderecos = vendedor["endereço"]
+    if conR.exists(vendedor["email"]+"-endereco") > 0:
+        conR.delete(vendedor["email"]+"-endereco")
+    for endereco in enderecos:
+        conR.lpush(vendedor["email"]+"-endereco", pickle.dumps(endereco))
+
+def syncMongoVendEnd():
+    from compras_crud import search
+    global db
+    col = db.vendedor
+    vendedores = search(sortVendedor())
+    vendedor = vendedores[int(input("Escolha o vendedor: "))]
+    enderecosMongo = []
+    enderecosRedis = conR.lrange(vendedor["email"]+"-enderecos", 0, -1)
+    for endereco in enderecosRedis:
+        enderecosMongo.append(pickle.loads(endereco))
+    query = { "_id": vendedor["_id"]}
+    toUpdate = {"$set":{ "endereço": enderecosMongo}}
+    col.update_one(query, toUpdate)
 
 #deleteVendedor()
 #insertVendedor()

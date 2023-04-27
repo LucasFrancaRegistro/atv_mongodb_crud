@@ -175,6 +175,30 @@ def syincMongoFav():
     col.update_one(query, toUpdate)
 
 
+def syncRedisUsuaEnd():
+    from compras_crud import search
+    usuarios = search(sortUsuario())
+    usuario = usuarios[int(input("Escolha o usuario: "))]
+    enderecos = usuario["endereço"]
+    if conR.exists(usuario["email"]+"-endereco") > 0:
+        conR.delete(usuario["email"]+"-endereco")
+    for endereco in enderecos:
+        conR.lpush(usuario["email"]+"-endereco", pickle.dumps(endereco))
+
+def syncMongoUsuaEnd():
+    from compras_crud import search
+    global db
+    col = db.usuario
+    usuarios = search(sortUsuario())
+    usuario = usuarios[int(input("Escolha o usuario: "))]
+    enderecosMongo = []
+    enderecosRedis = conR.lrange(usuario["email"]+"-enderecos", 0, -1)
+    for endereco in enderecosRedis:
+        enderecosMongo.append(pickle.loads(endereco))
+    query = { "_id": usuario["_id"]}
+    toUpdate = {"$set":{ "endereço": enderecosMongo}}
+    col.update_one(query, toUpdate)
+
 #insertUsuario()
 #deleteUsuario()
 #restaurarUsuario()
