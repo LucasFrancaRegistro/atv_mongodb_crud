@@ -11,32 +11,25 @@ conR = redis.Redis(host='redis-10721.c261.us-east-1-4.ec2.cloud.redislabs.com',
 global db
 db = client.mercadolivre
 
-def search(docs):
-    objetos = []
-    for obj in docs:
-        objetos.append(obj)
+def search(objetos):
     for obj_index in range(len(objetos)):
         print(str(obj_index) + ':  ' + str(objetos[obj_index]))
     return objetos
 
-def searchNomes(docs):
-    objetos = []
-    for obj in docs:
-        objetos.append(obj)
+def searchNomes(objetos):
     for obj_index in range(len(objetos)):
         print(str(obj_index) + ':  ' + objetos[obj_index]['nome'])
     return objetos
 
-def searchCompras(docs):
-    objetos = []
-    for compra in docs:
-        compras = {"usuario": compra["usuario"]["nome"],
-                "vendedor": compra["vendedor"]["nome"],
-                "produto": compra["produto"]["nome"]}
-        objetos.append(compra)
+def showCompras(objetos):
+    for i in range(len(objetos)):
+        print(str(i)+ ': '+
+            str({ "data": objetos[i]["data"],
+            "usuario": objetos[i]["usuario"]["nome"],
+            "vendedor": objetos[i]["vendedor"]["nome"],
+            "produto": objetos[i]["produto"]["nome"]}))
 
 def insertCompra():
-    from produto_crud import sortProduto
     from usuario_crud import sortUsuario
     from vendedor_crud import sortVendedor
     global db
@@ -56,7 +49,10 @@ def sortCompras():
     global db
     col = db.compras
     docs = col.find()
-    return docs
+    objetos = []
+    for obj in docs:
+        objetos.append(obj)
+    return objetos
 
 def updateCompra():
     from produto_crud import sortProduto
@@ -64,7 +60,8 @@ def updateCompra():
     from vendedor_crud import sortVendedor
     global db
     col = db.compras
-    compras = search(sortCompras())
+    compras = sortCompras()
+    showCompras(compras)
     compra = compras[int(input("Escolha a compra que deseja editar: "))]
     print('''O que você deseja editar?
     Data
@@ -82,7 +79,7 @@ def updateCompra():
         produto = produtos[int(input('Escolha o produto ue deseja atribuir a compra:'))]
         del produto["vendedor"]
         valor = produto
-    elif escolha == 'produto':
+    elif escolha == 'vendedor':
         vendedores = search(sortVendedor())
         valor = vendedores[int(input('Escolha o vendedor ue deseja atribuir a compra:'))]
     toUpdate = { "$set": { escolha: valor} }
@@ -100,8 +97,9 @@ def deleteCompra():
     col.delete_one(query)
 
 
+# print(search(sortCompras()))
+# showCompras(sortCompras())
 #def syncMongo():
-
 # for i in conR.lrange("teste", 0, -1):
 #     print(i)
 # conR.lpush("teste", "teste")
