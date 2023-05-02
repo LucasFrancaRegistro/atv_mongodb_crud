@@ -36,7 +36,10 @@ def sortVendedor():
     global db
     col = db.vendedor
     docs = col.find().sort('nome')
-    return docs
+    objetos = []
+    for obj in docs:
+        objetos.append(obj)
+    return objetos
 
 def updateVendedor():
     from usuario_crud import updateEndereco

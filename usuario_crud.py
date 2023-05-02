@@ -78,7 +78,10 @@ def sortUsuario():
     global db
     col = db.usuario
     docs = col.find().sort('nome')
-    return docs
+    objetos = []
+    for obj in docs:
+        objetos.append(obj)
+    return objetos
 
 def updateUsuario():
     from compras_crud import search

@@ -49,7 +49,10 @@ def sortProduto():
     global db
     col = db.produtos
     docs = col.find().sort('nome')
-    return docs
+    objetos = []
+    for obj in docs:
+        objetos.append(obj)
+    return objetos
 
 def deleteProduto():
     from compras_crud import search
