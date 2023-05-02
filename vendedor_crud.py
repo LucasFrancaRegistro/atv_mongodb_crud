@@ -11,7 +11,7 @@ global db
 db = client.mercadolivre
 
 def insertVendedor():
-    from vendedor_crud import createEndereso
+    from usuario_crud import createEndereco
     global db
     col = db.vendedor
     nome = input('nome do vendedor: ')
@@ -19,14 +19,15 @@ def insertVendedor():
     cpf = input('cpf do vendedor: ')
     enderecos = []
     while True:
-        enderecos.append(createEndereso())
+        enderecos.append(createEndereco())
         resposta = input('quer adicionar outro endereço? (y/n) ')
         if resposta == 'n':
             break
     doc = {"nome": nome,
         "email": email,
         "cpf": cpf,
-        'endereço': enderecos
+        'endereço': enderecos,
+        'produtos': []
         }
     x = col.insert_one(doc)
     print(x.inserted_id)
@@ -38,7 +39,7 @@ def sortVendedor():
     return docs
 
 def updateVendedor():
-    from vendedor_crud import updateEndereco
+    from usuario_crud import updateEndereco
     from compras_crud import search
     global db
     col = db.vendedor
@@ -89,9 +90,8 @@ def deleteVendedor():
     global db
     col = db.vendedor
     vendedores = search(sortVendedor())
-    escolha = int(input("Vendedor a deletar: "))
-    vendedor = vendedores[escolha]["_id"]
-    query = { "_id": vendedor }
+    escolha = int(input("Vendedor a deletar: "))[vendedores[escolha]["_id"]]
+    query = { "_id": vendedor['_id'] }
     col.delete_one(query)
 
 def syncRedisVendEnd():

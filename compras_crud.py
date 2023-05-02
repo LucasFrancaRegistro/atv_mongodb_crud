@@ -27,6 +27,14 @@ def searchNomes(docs):
         print(str(obj_index) + ':  ' + objetos[obj_index]['nome'])
     return objetos
 
+def searchCompras(docs):
+    objetos = []
+    for compra in docs:
+        compras = {"usuario": compra["usuario"]["nome"],
+                "vendedor": compra["vendedor"]["nome"],
+                "produto": compra["produto"]["nome"]}
+        objetos.append(compra)
+
 def insertCompra():
     from produto_crud import sortProduto
     from usuario_crud import sortUsuario
@@ -34,17 +42,10 @@ def insertCompra():
     global db
     col = db.compras
     data = input("Insira a data da compra: ")
-    usuarios = searchNomes(sortUsuario())
-    escolha = input("Usuario da compra: ")
-    usuario = usuarios[int(escolha)]
+    usuario = searchNomes(sortUsuario())[int(input("Usuario da compra: "))]
     del usuario["favoritos"]
-    produtos = searchNomes(sortProduto())
-    escolha = input("Produto comprado: ")
-    produto = produtos[int(escolha)]
-    del produto["vendedor"]
-    vendedores = searchNomes(sortVendedor())
-    escolha = input("Vendedor do produto: ")
-    vendedor = vendedores[int(escolha)]
+    vendedor = searchNomes(sortVendedor())[int(input("Vendedor do produto: "))]
+    produto = searchNomes(vendedor["produtos"])[int(input("Produto comprado: "))]
     doc = {"data": data,
         "usuario": usuario,
         "produto": produto,

@@ -32,9 +32,9 @@ def updateProduto():
     global db
     col = db.produtos
     produtos = search(sortProduto())
-    escolha = int(input("produto a editar"))
+    escolha = int(input("produto a editar: "))
     produto = produtos[escolha]
-    campo = input("campo para editar ")
+    campo = input("campo para editar: ")
     if campo == "vendedor":
         vendedores = search(sortVendedor())
         escolha = int(input("Escolha o vendedor: "))
@@ -52,9 +52,11 @@ def sortProduto():
     return docs
 
 def deleteProduto():
+    from compras_crud import search
     global db
     col = db.produtos
-    query = { "nome": input("Nome do produto a deletar: ")}
+    produto = search(sortProduto())[int(input("Escolha o produto a deletar: "))]
+    query = { "_id": produto["_id"]}
     col.delete_one(query)
 
 # deleteProduto()

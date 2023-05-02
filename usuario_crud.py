@@ -60,7 +60,6 @@ def insertUsuario():
     email = input('Email do usuario: ')
     cpf = input('Cpf do usuario: ')
     enderecos = []
-    favoritos = []
     while True:
         enderecos.append(createEndereco())
         resposta = input('Quer adicionar outro endereço? (y/n) ')
@@ -70,7 +69,7 @@ def insertUsuario():
         "email": email,
         "cpf": cpf,
         'endereço': enderecos,
-        'favoritos': favoritos
+        'favoritos': []
         }
     x = col.insert_one(doc)
     print(x.inserted_id)
@@ -116,7 +115,6 @@ def deleteUsuario():
     conR.expire(usuario["email"], 7200)
     query = { "_id": usuario["_id"] }
     col.delete_one(query)
-    print(conR.get(usuario["email"]))
 
 def restaurarUsuario():
     global db
