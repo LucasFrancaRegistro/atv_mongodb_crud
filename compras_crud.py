@@ -76,12 +76,12 @@ def updateCompra():
         valor = usuario
     elif escolha == 'produto':
         produtos = search(sortProduto())
-        produto = produtos[int(input('Escolha o produto ue deseja atribuir a compra:'))]
+        produto = produtos[int(input('Escolha o produto ue deseja atribuir a compra: '))]
         del produto["vendedor"]
         valor = produto
     elif escolha == 'vendedor':
         vendedores = search(sortVendedor())
-        valor = vendedores[int(input('Escolha o vendedor ue deseja atribuir a compra:'))]
+        valor = vendedores[int(input('Escolha o vendedor ue deseja atribuir a compra: '))]
     toUpdate = { "$set": { escolha: valor} }
     query = { "_id": compra["_id"]}
     col.update_one(query, toUpdate)
