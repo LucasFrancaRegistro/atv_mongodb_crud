@@ -137,13 +137,19 @@ def updateFavorito(usuario):
     col = db.usuario
     favoritos = usuario["favoritos"]
     print('''O que deseja fazer?
-    1:  Adicinar aos favoritos
-    2:  Remover dos favoritos''')
+    1:  Adicionar aos favoritos
+    2:  Adicionar aos favoritos redis
+    3:  Remover dos favoritos''')
     escolha = input('Escolha uma opção: ')
     if escolha == '1':
         produtos = search(sortProduto())
         favoritos.append(produtos[int(input("escolha o produto que quer adicionar: "))])
     elif escolha == '2':
+        if conR.exists(usuario["email"]+"-endereco") < 1:
+            conR.delete(usuario["email"]+"-endereco")
+        produto = search(sortProduto())[int(input("Escolha o produto para adicionar aso favoritos: "))]
+        conR.lpush(usuario["email"]+"-endereco", pickle.dumps(produto))
+    elif escolha == '3':
         for index in range(len(favoritos)):
             print(str(index) + ':' + str(favoritos[index]))
         favoritos.pop(int(input("Escolha o produto para remover: ")))
@@ -192,13 +198,16 @@ def syncMongoUsuaEnd():
     col = db.usuario
     usuarios = search(sortUsuario())
     usuario = usuarios[int(input("Escolha o usuario: "))]
-    enderecosMongo = []
-    enderecosRedis = conR.lrange(usuario["email"]+"-enderecos", 0, -1)
-    for endereco in enderecosRedis:
-        enderecosMongo.append(pickle.loads(endereco))
-    query = { "_id": usuario["_id"]}
-    toUpdate = {"$set":{ "endereço": enderecosMongo}}
-    col.update_one(query, toUpdate)
+    if conR.exists(usuario["email"]+"-endereco") < 1:
+        print("Este usuario não possui favoritos no Redis: ")
+    else:
+        enderecosMongo = []
+        enderecosRedis = conR.lrange(usuario["email"]+"-enderecos", 0, -1)
+        for endereco in enderecosRedis:
+            enderecosMongo.append(pickle.loads(endereco))
+        query = { "_id": usuario["_id"]}
+        toUpdate = {"$set":{ "endereço": enderecosMongo}}
+        col.update_one(query, toUpdate)
 
 #insertUsuario()
 #deleteUsuario()
